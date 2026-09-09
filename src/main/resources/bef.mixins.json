@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.neojaden.bef.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "epicfighttinkercompat.refmap.json",
+  "mixins": [
+    "MixinBehaviorSeries",
+    "MixinCombatBehaviors"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
