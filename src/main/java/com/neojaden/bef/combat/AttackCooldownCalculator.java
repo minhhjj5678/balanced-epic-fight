@@ -1,5 +1,7 @@
 package com.neojaden.bef.combat;
 
+import com.neojaden.bef.data.ModifierReloadListener;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,14 +14,11 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 public class AttackCooldownCalculator {
-    public static final int BASE_COOLDOWN_TICKS = 40;
-    public static final float TICKS_DECREASE_PER_HEALTH = 0.2f;
-    public static final float TICKS_INCREASE_PER_MOB = 8f;
 
     public static int getCooldownTicks(MobPatch<?> mobPatch) {
-        int decrement = (int) (mobPatch.getOriginal().getMaxHealth() * TICKS_DECREASE_PER_HEALTH);
-        int increment =  (int) (countNearbyMonster(mobPatch.getOriginal(), (e, owner) -> e != owner && e.isAlive() && e.getTarget() != owner && (!(owner instanceof Targeting mob) || mob.getTarget() != e)) * TICKS_INCREASE_PER_MOB);
-        return Mth.clamp(BASE_COOLDOWN_TICKS - decrement + increment, 0, 100);
+        int decrement = (int) (mobPatch.getOriginal().getMaxHealth() * ModifierReloadListener.ATTACK_COOLDOWN.tickDecreasePerHealth());
+        int increment =  (int) (countNearbyMonster(mobPatch.getOriginal(), (e, owner) -> e != owner && e.isAlive() && e.getTarget() != owner && (!(owner instanceof Targeting mob) || mob.getTarget() != e) && !ModifierReloadListener.ATTACK_COOLDOWN.excludedMobs().contains(BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()))) * ModifierReloadListener.ATTACK_COOLDOWN.tickIncreasePerMob());
+        return Mth.clamp(ModifierReloadListener.ATTACK_COOLDOWN.baseCooldownTicks() - decrement + increment, 0, ModifierReloadListener.ATTACK_COOLDOWN.maxCooldownTicks());
     }
 
     public static int countNearbyMonster(LivingEntity entity, BiPredicate<Mob, LivingEntity> condition) {

@@ -1,0 +1,6 @@
+{
+  "algorithm": "inverse",
+  "maxMobCount": 5,
+  "reductionPerMob": 0.15,
+  "excludedMobs": ["minecraft:enderman"]
+}
