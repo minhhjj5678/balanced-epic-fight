@@ -1,7 +1,7 @@
 {
   "baseCooldownTicks": 40,
-  "tickIncreasePerMob": 0.2,
-  "tickDecreasePerHealth": 8.0,
+  "tickIncreasePerMob": 8.0,
+  "tickDecreasePerHealth": 0.2,
   "maxCooldownTicks": 100,
   "excludedMobs": ["minecraft:enderman"]
 }
