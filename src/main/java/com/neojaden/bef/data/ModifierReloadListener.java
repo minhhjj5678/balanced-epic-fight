@@ -22,6 +22,7 @@ public class ModifierReloadListener extends SimpleJsonResourceReloadListener {
             .create();
 
     public static AttackCooldownModifier ATTACK_COOLDOWN = AttackCooldownModifier.DEFAULT;
+    public static StaminaCostModifier STAMINA_COST = StaminaCostModifier.DEFAULT;
 
     public ModifierReloadListener() {
         super(GSON, FOLDER);
@@ -30,10 +31,14 @@ public class ModifierReloadListener extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(@NotNull Map<ResourceLocation, JsonElement> jsonMap, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
         ATTACK_COOLDOWN = AttackCooldownModifier.DEFAULT;
+        STAMINA_COST = StaminaCostModifier.DEFAULT;
+
         jsonMap.forEach((key, jsonElement) -> {
             try {
                 if (key.equals(AttackCooldownModifier.RL)) {
                     ATTACK_COOLDOWN = GSON.fromJson(jsonElement, AttackCooldownModifier.class);
+                } else if (key.equals(StaminaCostModifier.RL)) {
+                    STAMINA_COST = GSON.fromJson(jsonElement, StaminaCostModifier.class);
                 }
             } catch (Exception e) {
                 LOGGER.error("Failed to parse modifier file: {}", key, e);
